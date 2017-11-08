@@ -8,6 +8,7 @@ With just three command lines executed you have the Indy Demo ready to use.
 
 ```
 $ git clone https://github.com/brycecurtis/indy-tutorial-sandbox.git
+$ cd indy-tutorial-sandbox
 $ make indy-base
 $ make local run-demo
 ```
