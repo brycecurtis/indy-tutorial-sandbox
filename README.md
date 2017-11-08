@@ -2,6 +2,15 @@
 
 A turnkey, Docker-based sandbox that enables quick and easy exploration of Hyperledger Indy concepts. This devops repo can be used to gather hands-on experience of Indy basics using the scenarios outlined in the [Sovrin's Getting Started Guide](https://github.com/hyperledger/indy-node/blob/stable/getting-started.md).
 
+## Quick Summary commands
+
+With just three command lines executed you have the Indy Demo ready to use.
+
+```
+$ git clone https://github.com/brycecurtis/indy-tutorial-sandbox.git
+$ make indy-base
+$ make local run-demo
+```
 
 # Indy Docker
 
