@@ -34,6 +34,10 @@ SHELL := /bin/bash #bash syntax
 #
 #
 
+IPS=10.0.1.12,10.0.1.12,10.0.1.12,10.0.1.12
+IPFABER=10.0.1.12
+IPACME=10.0.1.12
+IPTHRIFT=10.0.1.12
 
 #
 # set the IP address of your nodes
