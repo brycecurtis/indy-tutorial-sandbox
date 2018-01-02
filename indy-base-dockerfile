@@ -38,7 +38,7 @@ RUN cd indy-anoncreds && ./setup-charm.sh && cd ..
 # Common Setup Instructions
 #--------------------------
 RUN apt-get -y install software-properties-common
-RUN add-apt-repository ppa:fkrull/deadsnakes
+RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get -y update
 
 #-----------------------
