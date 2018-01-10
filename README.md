@@ -4,7 +4,7 @@ A turnkey, Docker-based sandbox that enables quick and easy exploration of Hyper
 
 ## Quick Summary commands
 
-With just three command lines executed you have the Indy Demo ready to use.
+With just four command lines executed you have the Indy Demo ready to use.
 
 ```
 $ git clone https://github.com/brycecurtis/indy-tutorial-sandbox.git
