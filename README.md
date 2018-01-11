@@ -211,3 +211,10 @@ To remove the Docker image from your system:
 ```
 $ docker rmi indy-base
 ```
+
+## Links
+
+* Getting Started with Indy - https://github.com/hyperledger/indy-node/blob/stable/getting-started.md
+* Indy Node - https://github.com/hyperledger/indy-node
+* Indy – Running the Getting Started tutorial locally - https://github.com/hyperledger/indy-node/blob/master/docs/indy-running-locally.md
+* Create a Network and Start Nodes - https://github.com/hyperledger/indy-node/blob/master/docs/start-nodes.md
