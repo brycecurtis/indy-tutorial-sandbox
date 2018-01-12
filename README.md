@@ -4,7 +4,7 @@ A turnkey, Docker-based sandbox that enables quick and easy exploration of Hyper
 
 ## Quick Summary commands
 
-With just three command lines executed you have the Indy Demo ready to use.
+With just four command lines executed you have the Indy Demo ready to use.
 
 ```
 $ git clone https://github.com/panickervinod/indy-tutorial-sandbox.git
@@ -211,3 +211,10 @@ To remove the Docker image from your system:
 ```
 $ docker rmi indy-base
 ```
+
+## Links
+
+* [Getting Started with Indy](https://github.com/hyperledger/indy-node/blob/stable/getting-started.md)
+* [Indy Node](https://github.com/hyperledger/indy-node)
+* [Indy – Running the Getting Started tutorial locally](https://github.com/hyperledger/indy-node/blob/master/docs/indy-running-locally.md)
+* [Create a Network and Start Nodes](https://github.com/hyperledger/indy-node/blob/master/docs/start-nodes.md)
