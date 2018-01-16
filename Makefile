@@ -48,7 +48,7 @@ IPTHRIFT=10.0.1.12
 #IPTHRIFT=ip_address
 
 # fixes if there is an addr:
-LOCAL:=$(shell ifconfig|grep 'inet '|grep -vm1 127.0.0.1|awk '{print $$2}' | sed -e 's/addr://g')
+LOCAL:=$(shell ifconfig|grep 'inet '|grep -vm1 127.0.0.1|awk '{print $2}' | sed -e 's/addr://g')
 
 NO_COLOR="\x1b[0m"
 OK_COLOR="\x1b[32;01m"

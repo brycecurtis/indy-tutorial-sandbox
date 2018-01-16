@@ -7,7 +7,7 @@ A turnkey, Docker-based sandbox that enables quick and easy exploration of Hyper
 With just four command lines executed you have the Indy Demo ready to use.
 
 ```
-$ git clone https://github.com/brycecurtis/indy-tutorial-sandbox.git
+$ git clone https://github.com/panickervinod/indy-tutorial-sandbox.git
 $ cd indy-tutorial-sandbox
 $ make indy-base
 $ make local run-demo
@@ -32,7 +32,7 @@ Information on downloading and installing Docker for various platforms can be fo
 Clone the **indy-tutorial-sandbox** repository.
 
 ```
-$ git clone https://github.com/brycecurtis/indy-tutorial-sandbox.git
+$ git clone https://github.com/panickervinod/indy-tutorial-sandbox.git
 ```
    
 Change to the cloned directory and use the **Makefile** target **indy-base** to create the **indy-base** Docker image.
