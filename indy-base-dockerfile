@@ -32,7 +32,7 @@ ADD ./indy-node /root
 # Anon Credentials
 #--------------------------
 RUN git clone https://github.com/hyperledger/indy-anoncreds.git
-RUN cd indy-anoncreds && ./setup-charm.sh && cd ..
+RUN cd indy-anoncreds && git checkout stable && ./setup-charm.sh && cd ..
 
 #--------------------------
 # Common Setup Instructions

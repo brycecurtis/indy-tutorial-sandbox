@@ -63,7 +63,7 @@ indy-base:
 	@echo -e  $(BLUE_COLOR)Indy-base Docker $(NO_COLOR)
 	-rm -Rf ./indy-node
 	-docker rmi -f indy-base
-	git clone https://github.com/hyperledger/indy-node.git; cd indy-node;pwd;git checkout 6b5a602062bdb14b86da9a0d0829e8a9a1b60cb1;git status
+	git clone https://github.com/hyperledger/indy-node.git; cd indy-node;pwd;git checkout stable;git status
 	cp ./indy-cli ./indy-node/scripts
 	docker build -t indy-base -f ./indy-base-dockerfile .
 	@echo -e  $(GREEN_COLOR)SUCCESS Indy-base Docker $(LOCAL) $(NO_COLOR)
@@ -84,22 +84,22 @@ info:
 
 cluster:
 	@echo -e  $(BLUE_COLOR) CLUSTER: Create 4 Nodes at IPS $(IPS) $(NO_COLOR)
-	docker run --name Node1 -d -p 9701:9701 -p 9702:9702 indy-base /bin/bash -c "init_indy_keys --name Node1; generate_indy_pool_transactions --nodes 4 --clients 5 --nodeNum 1 --ips $(IPS); start_indy_node Node1 9701 9702"
-	docker run --name Node2 -d -p 9703:9703 -p 9704:9704 indy-base /bin/bash -c "init_indy_keys --name Node2; generate_indy_pool_transactions --nodes 4 --clients 5 --nodeNum 2 --ips $(IPS); start_indy_node Node2 9703 9704"
-	docker run --name Node3 -d -p 9705:9705 -p 9706:9706 indy-base /bin/bash -c "init_indy_keys --name Node3; generate_indy_pool_transactions --nodes 4 --clients 5 --nodeNum 3 --ips $(IPS); start_indy_node Node3 9705 9706"
-	docker run --name Node4 -d -p 9707:9707 -p 9708:9708 indy-base /bin/bash -c "init_indy_keys --name Node4; generate_indy_pool_transactions --nodes 4 --clients 5 --nodeNum 4 --ips $(IPS); start_indy_node Node4 9707 9708"
+	docker run --name Node1 -d -p 9701:9701 -p 9702:9702 indy-base /bin/bash -c "create_dirs.sh; init_indy_keys --name Node1; generate_indy_pool_transactions --nodes 4 --clients 5 --nodeNum 1 --ips $(IPS); start_indy_node Node1 9701 9702"
+	docker run --name Node2 -d -p 9703:9703 -p 9704:9704 indy-base /bin/bash -c "create_dirs.sh; init_indy_keys --name Node2; generate_indy_pool_transactions --nodes 4 --clients 5 --nodeNum 2 --ips $(IPS); start_indy_node Node2 9703 9704"
+	docker run --name Node3 -d -p 9705:9705 -p 9706:9706 indy-base /bin/bash -c "create_dirs.sh; init_indy_keys --name Node3; generate_indy_pool_transactions --nodes 4 --clients 5 --nodeNum 3 --ips $(IPS); start_indy_node Node3 9705 9706"
+	docker run --name Node4 -d -p 9707:9707 -p 9708:9708 indy-base /bin/bash -c "create_dirs.sh; init_indy_keys --name Node4; generate_indy_pool_transactions --nodes 4 --clients 5 --nodeNum 4 --ips $(IPS); start_indy_node Node4 9707 9708"
 	@echo -e  $(OK_COLOR) SUCCESS: Cluster 4 nodes success at IPS $(IPS) $(NO_COLOR)
 
 indy-cli: info
 	@echo -e  $(BLUE_COLOR) INDY DEBUG: Create Indy  $(IPS) $(NO_COLOR)
-	docker run --rm --name Indy -it indy-base /bin/bash -c "generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); /bin/bash"
+	docker run --rm --name Indy -it indy-base /bin/bash -c "create_dirs.sh; generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); /bin/bash"
 
 indy: info
 	@echo -e  $(BLUE_COLOR) INDY: Create Indy and initialize with commandline jobs $(IPS) $(NO_COLOR)
 	docker run --rm --name Indy -it indy-base /bin/bash -c "\
-                        generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); \
-			/root/scripts/indy-cli \
-			  'connect test' \
+                        create_dirs.sh; generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); \
+			  /root/scripts/indy-cli \
+			  'connect sandbox' \
 			  'new key with seed 000000000000000000000000Steward1' \
 			  'send NYM dest=ULtgFQJe6bjiFbs7ke3NJD role=TRUST_ANCHOR verkey=~5kh3FB4H3NKq7tUDqeqHc1' \
 			  'send NYM dest=CzkavE58zgX7rUMrzSinLr role=TRUST_ANCHOR verkey=~WjXEvZ9xj4Tz9sLtzf7HVP' \
@@ -110,23 +110,24 @@ indy: info
 			  'send ATTRIB dest=CzkavE58zgX7rUMrzSinLr raw={\"endpoint\": {\"ha\": \"$(IPACME):6666\", \"pubkey\": \"C5eqjU7NMVMGGfGfx2ubvX5H9X346bQt5qeziVAo3naQ\"}}' \
 			  'new key with seed Thrift00000000000000000000000000' \
 			  'send ATTRIB dest=H2aKRiDeq8aLZSydQMDbtf raw={\"endpoint\": {\"ha\": \"$(IPTHRIFT):7777\", \"pubkey\": \"AGBjYvyM3SFnoiDGAEzkSLHvqyzVkXeMZfKDvdpEsC2x\"}}' \
-			  'save wallet' \
-			"
+			  'save wallet'; \
+			  /bin/bash \
+		 	"
 	@echo -e  $(OK_COLOR) SUCCESS: Indy $(NO_COLOR)
 
 faber:
 	@echo -e  $(BLUE_COLOR) FABER: Create Faber $(IPS) $(NO_COLOR)
-	docker run --rm --name Faber -d -p 5555:5555 indy-base /bin/bash -c "generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); sleep 40; python3 ./indy_client/test/agent/faber.py  --port 5555"
+	docker run --rm --name Faber -d -p 5555:5555 indy-base /bin/bash -c "create_dirs.sh; generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); sleep 40; python3 ./indy_client/test/agent/faber.py  --port 5555"
 	@echo -e  $(OK_COLOR) Faber success assumes IPS $(IPS) $(NO_COLOR)
 
 acme:
 	@echo -e  $(BLUE_COLOR) ACME: Create Acme $(IPS) $(NO_COLOR)
-	docker run --rm --name Acme -d -p 6666:6666 indy-base /bin/bash -c "generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); sleep 40; python3 ./indy_client/test/agent/acme.py  --port 6666"
+	docker run --rm --name Acme -d -p 6666:6666 indy-base /bin/bash -c "create_dirs.sh; generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); sleep 40; python3 ./indy_client/test/agent/acme.py  --port 6666"
 	@echo -e  $(OK_COLOR) Acme success assumes IPS $(IPS) $(NO_COLOR)
 
 thrift:
 	@echo -e  $(BLUE_COLOR) THRIFT: Create Thrift $(IPS) $(NO_COLOR)
-	docker run --rm --name Thrift -d -p 7777:7777 indy-base /bin/bash -c "generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); sleep 40; python3 ./indy_client/test/agent/thrift.py  --port 7777"
+	docker run --rm --name Thrift -d -p 7777:7777 indy-base /bin/bash -c "create_dirs.sh; generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); sleep 40; python3 ./indy_client/test/agent/thrift.py  --port 7777"
 	@echo -e  $(OK_COLOR) Thrift success assumes IPS $(IPS) $(NO_COLOR)
 
 stop:

@@ -39,9 +39,12 @@ logger.propagate = False
 logger.disabled = True
 
 config = getConfig()
-baseDir = config.baseDir
+baseDir = os.path.expanduser(config.CLI_BASE_DIR)
+network_dir = os.path.expanduser(config.CLI_NETWORK_DIR)
 if not os.path.exists(baseDir):
     os.makedirs(baseDir)
+if not os.path.exists(network_dir):
+    os.makedirs(network_dir)
 loadPlugins(baseDir)
 
 # NOTE: Put all regular imports below (not related to loadplugin)
@@ -68,6 +71,7 @@ def run_cli():
         logFilePath = os.path.join(curDir, config.logFilePath)
         cli = IndyCli(looper=looper,
                       basedirpath=baseDir,
+                      ledger_base_dir=network_dir,
                       logFileName=logFilePath,
                       withNode=withNode
                       )
