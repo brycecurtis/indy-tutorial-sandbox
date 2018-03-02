@@ -59,6 +59,8 @@ BLUE_COLOR="\x1b[34;01m"
 
 run-demo: clean info cluster faber acme thrift indy
 
+run-alice: clean info cluster faber acme thrift indy-alice
+
 indy-base:
 	@echo -e  $(BLUE_COLOR)Indy-base Docker $(NO_COLOR)
 	-rm -Rf ./indy-node
@@ -92,7 +94,7 @@ cluster:
 
 indy-cli: info
 	@echo -e  $(BLUE_COLOR) INDY DEBUG: Create Indy  $(IPS) $(NO_COLOR)
-	docker run --rm --name Indy -it indy-base /bin/bash -c "create_dirs.sh; generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); /bin/bash"
+	docker run --rm --name IndyCli -it indy-base /bin/bash -c "create_dirs.sh; generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); /bin/bash"
 
 indy: info
 	@echo -e  $(BLUE_COLOR) INDY: Create Indy and initialize with commandline jobs $(IPS) $(NO_COLOR)
@@ -111,6 +113,56 @@ indy: info
 			  'new key with seed Thrift00000000000000000000000000' \
 			  'send ATTRIB dest=H2aKRiDeq8aLZSydQMDbtf raw={\"endpoint\": {\"ha\": \"$(IPTHRIFT):7777\", \"pubkey\": \"AGBjYvyM3SFnoiDGAEzkSLHvqyzVkXeMZfKDvdpEsC2x\"}}' \
 			  'save wallet'; \
+			  /bin/bash \
+		 	"
+	@echo -e  $(OK_COLOR) SUCCESS: Indy $(NO_COLOR)
+
+indy-alice: info
+	@echo -e  $(BLUE_COLOR) INDY ALICE: Create Indy and initialize with commandline jobs $(IPS) $(NO_COLOR)
+	docker run --rm --name IndyAlice -it indy-base /bin/bash -c "\
+                        create_dirs.sh; generate_indy_pool_transactions --nodes 4 --clients 5 --ips $(IPS); \
+			  /root/scripts/indy-cli \
+			  'connect sandbox' \
+			  'new key with seed 000000000000000000000000Steward1' \
+			  'send NYM dest=ULtgFQJe6bjiFbs7ke3NJD role=TRUST_ANCHOR verkey=~5kh3FB4H3NKq7tUDqeqHc1' \
+			  'send NYM dest=CzkavE58zgX7rUMrzSinLr role=TRUST_ANCHOR verkey=~WjXEvZ9xj4Tz9sLtzf7HVP' \
+			  'send NYM dest=H2aKRiDeq8aLZSydQMDbtf role=TRUST_ANCHOR verkey=~3sphzTb2itL2mwSeJ1Ji28' \
+			  'new key with seed Faber000000000000000000000000000' \
+			  'send ATTRIB dest=ULtgFQJe6bjiFbs7ke3NJD raw={\"endpoint\": {\"ha\": \"$(IPFABER):5555\", \"pubkey\": \"5hmMA64DDQz5NzGJNVtRzNwpkZxktNQds21q3Wxxa62z\"}}' \
+			  'new key with seed Acme0000000000000000000000000000' \
+			  'send ATTRIB dest=CzkavE58zgX7rUMrzSinLr raw={\"endpoint\": {\"ha\": \"$(IPACME):6666\", \"pubkey\": \"C5eqjU7NMVMGGfGfx2ubvX5H9X346bQt5qeziVAo3naQ\"}}' \
+			  'new key with seed Thrift00000000000000000000000000' \
+			  'send ATTRIB dest=H2aKRiDeq8aLZSydQMDbtf raw={\"endpoint\": {\"ha\": \"$(IPTHRIFT):7777\", \"pubkey\": \"AGBjYvyM3SFnoiDGAEzkSLHvqyzVkXeMZfKDvdpEsC2x\"}}' \
+			  'save wallet' \
+			  'prompt ALICE' \
+			  'new wallet Alice' \
+			  'load sample/faber-request.indy' \
+			  'show connection Faber' \
+			  'accept request from Faber' \
+			  'show claim Transcript' \
+			  'request claim Transcript' \
+			  'show claim Transcript' \
+			  'save wallet' \
+			  'load sample/acme-job-application.indy' \
+			  'accept request from Acme' \
+			  'show proof request Job-Application' \
+			  'set first_name to Alice' \
+			  'set last_name to Garcia' \
+			  'set phone_number to 123-456-7890' \
+			  'show proof request Job-Application' \
+			  'send proof Job-Application to Acme' \
+			  'show connection Acme' \
+			  'show claim Job-Certificate' \
+			  'request claim Job-Certificate' \
+			  'show claim Job-Certificate' \
+			  'load sample/thrift-loan-application.indy' \
+			  'accept request from Thrift' \
+			  'show proof request Loan-Application-Basic' \
+			  'send proof Loan-Application-Basic to Thrift' \
+			  'show proof request Loan-Application-KYC' \
+			  'send proof Loan-Application-KYC to Thrift' \
+			  'save wallet' \
+			  ; \
 			  /bin/bash \
 		 	"
 	@echo -e  $(OK_COLOR) SUCCESS: Indy $(NO_COLOR)

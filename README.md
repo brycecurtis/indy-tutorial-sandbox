@@ -91,15 +91,15 @@ When the Indy container starts, it runs several Indy commands that set up the ag
 The following commands are from the demo script and can be used to test that the demo environment is working correctly.
 
 ```
-indy@test> prompt ALICE
-ALICE@test> new wallet Alice
-ALICE@test> show sample/faber-request.indy
-ALICE@test> load sample/faber-request.indy
-ALICE@test> show connection "Faber College"
-ALICE@test> accept request from "Faber College"
-ALICE@test> show claim Transcript
-ALICE@test> request claim Transcript
-ALICE@test> show claim Transcript
+indy@sandbox> prompt ALICE
+ALICE@sandbox> new wallet Alice
+ALICE@sandbox> show sample/faber-request.indy
+ALICE@sandbox> load sample/faber-request.indy
+ALICE@sandbox> show connection "Faber College"
+ALICE@sandbox> accept request from "Faber College"
+ALICE@sandbox> show claim Transcript
+ALICE@sandbox> request claim Transcript
+ALICE@sandbox> show claim Transcript
 ```
 
 ## Makefile Targets
@@ -117,6 +117,10 @@ The following **Makefile** targets can be used to start and stop the Docker cont
 **run-demo**
 
 * Start all Indy node, Indy agents and Indy CLI used for the **Alice Demo**.  This also automatically executes several Indy commands that set up the agents before leaving you at the **indy>** prompt.
+
+**run-alice**
+
+* Start all Indy node, Indy agents and Indy CLI used for the **Alice Demo**.  This also automatically executes all of the Indy commands that run the entire Alice demo before leaving you at the **indy>** prompt.
 
 **indy-cli**
 
